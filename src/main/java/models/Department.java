@@ -29,6 +29,10 @@ public class Department {
     public void setEmployeesNumber(int employeesNumber) {
         this.employeesNumber = employeesNumber;
     }
+    //seetter for the id
+    public void setId(int id){
+        this.id =id;
+    }
 
 
 
@@ -50,6 +54,7 @@ public class Department {
     private  String departmentName;
     private String description;
     private int employeesNumber;
+    private int id;
 
     public Department(String departmentName,String description,int employeesNumber){
         this.departmentName =departmentName;
