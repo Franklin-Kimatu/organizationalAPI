@@ -88,12 +88,35 @@ public class Sql2oDepartmentDao implements DepartmentDao {
     //methods  for having the many to many relationship for the departments and the articles
     @Override
     public void addDepartmentToArticle(Department department, Article article){
-
+        String sql ="INSERT INTO departments_articles(departmentId,articleId) VALUES(:departmentId,:articleId)";
+        try(Connection conn = sql2o.open()){
+            conn.createQuery(sql)
+                    .addParameter("departmentId",department.getId())
+                    .addParameter("articleId",article.getId())
+                    .executeUpdate();
+        }catch (Sql2oException ex){
+            System.out.println(ex);
+        }
     }
 
     @Override
     public List<Article> getAllArticlesForADepartment(int departmentId){
-        List<Article> articles = new ArrayList<>();
+        ArrayList<Article> articles = new ArrayList<>();
+        String joinQuery ="SELECT articleId FROM departments_articles WHERE departmentId =:departmentId";
+        try(Connection conn= sql2o.open()){
+            List<Integer> allArticlesId =conn.createQuery(joinQuery)
+                    .addParameter("departmentId",departmentId)
+                    .executeAndFetch(Integer.class);
+            for(Integer articId:allArticlesId){
+                String articleQuery = "SELECT * FROM articles WHERE id = :articleId";
+                articles.add(
+                        conn.createQuery(articleQuery)
+                        .addParameter("articleId",articId)
+                        .executeAndFetchFirst(Article.class));
+            }
+        }catch(Sql2oException ex){
+            System.out.println(ex);
+        }
         return articles;
     }
 }
