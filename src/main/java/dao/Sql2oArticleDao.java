@@ -63,12 +63,35 @@ public class Sql2oArticleDao implements ArticleDao{
 
     @Override
     public  void addArticleToDepartment(Article article, Department department){
-
+        String sql ="INSERT INTO departments_articles(departmentId,articleId) VALUES (:departmentId,:articleId)";
+        try(Connection conn =sql2o.open()){
+            conn.createQuery(sql)
+                    .addParameter("departmentId",department.getId())
+                    .addParameter("articleId",article.getId())
+                    .executeUpdate();
+        }catch (Sql2oException ex){
+            System.out.println(ex);
+        }
     }
 
     @Override
     public  List <Department> getAllDepartmentsForAnArticle(int articleId){
-        List<Department> departments = new ArrayList<>();
+        ArrayList<Department> departments = new ArrayList<>();
+        String joinQuery ="SELECT departmentId FROM departments_articles WHERE articleId =:articleId";
+
+        try(Connection conn =sql2o.open()){
+            List<Integer> allDepartmentIds = conn.createQuery(joinQuery)
+                    .addParameter("articleId",articleId)
+                    .executeAndFetch(Integer.class);
+            for( Integer departmentId : allDepartmentIds){
+                String departmentQuery ="SELECT * FROM departments WHERE id =:departmentId";
+                departments.add(conn.createQuery(departmentQuery)
+                .addParameter("departmentId",departmentId)
+                .executeAndFetchFirst(Department.class));
+            }
+        }catch (Sql2oException ex){
+            System.out.println(ex);
+        }
         return departments;
     }
 }
