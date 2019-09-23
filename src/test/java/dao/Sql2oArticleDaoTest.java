@@ -79,6 +79,22 @@ public class Sql2oArticleDaoTest {
         assertEquals(1,articleDao.getAllDepartmentsForAnArticle(testArticle.getId()).size());
     }
 
+    //tests for deleting an departments in the
+    @Test
+    public void deletingDepartmentsAlsoUpdatesJoinTable() throws  Exception{
+        Article testArticle =new Article("politics");
+        articleDao.add(testArticle);
+
+        Department testDepartment =setupDepartment();
+        departmentDao.add(testDepartment);
+
+        departmentDao.addDepartmentToArticle(testDepartment,testArticle);
+
+        departmentDao.deleteById(testDepartment.getId());
+
+        assertEquals(0,departmentDao.getAllArticlesForADepartment(testDepartment.getId()).size());
+    }
+
     //helper method
     public Article setupNewArticle(){
         return  new Article("Raila");
