@@ -20,3 +20,10 @@ userRole VARCHAR,
 departmentId VARCHAR
 );
 
+CREATE TABLE IF NOT EXISTS departments_articles(
+id int PRIMARY KEY auto_increment,
+articleid INTEGER,
+departmentid INTEGER
+);
+
+
