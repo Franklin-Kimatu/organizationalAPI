@@ -1,6 +1,7 @@
 package dao;
 
 import models.Article;
+import models.Department;
 import org.junit.After;
 import org.junit.Before;
 
@@ -51,7 +52,7 @@ public class Sql2oArticleDaoTest {
     }
 
     @Test
-    public void deleteByIdDeeletesCorrectArticle() throws Exception{
+    public void deleteByIdDeletesCorrectArticle() throws Exception{
         Article article =setupNewArticle();
         articleDao.add(article);
         articleDao.deleteById(article.getId());
@@ -69,5 +70,11 @@ public class Sql2oArticleDaoTest {
     //helper method
     public Article setupNewArticle(){
         return  new Article("Raila");
+    }
+
+    public Department setupDepartment(){
+        Department department =new Department("Operations","Daily errands",10);
+        departmentDao.add(department);
+        return department;
     }
 }
