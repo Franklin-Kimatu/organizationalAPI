@@ -1,12 +1,15 @@
 package dao;
 
 import com.sun.org.apache.bcel.internal.ExceptionConst;
+import models.Article;
 import models.Department;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.sql2o.*;
 
+
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -82,10 +85,33 @@ public class Sql2oDepartmentDaoTest {
         assertEquals(0,departmentDao.getAll().size());
     }
 
+    //methods for adding the articles for a department
+
+    @Test
+    public void DepartmentsReturnsArticlesCorrectly() throws Exception{
+        Article testArticle =new Article("politics");
+        articleDao.add(testArticle);
+        Article otherArticle =new Article("welfare");
+        articleDao.add(otherArticle);
+
+        Department testDepartment =setupDepartment();
+        departmentDao.add(testDepartment);
+        departmentDao.addDepartmentToArticle(testDepartment,testArticle);
+
+        departmentDao.addDepartmentToArticle(testDepartment,otherArticle);
+
+        Article[] articles ={testArticle,otherArticle};
+
+        assertEquals(Arrays.asList(articles),departmentDao.getAllArticlesForADepartment(testDepartment.getId()));
+    }
 //helper
     public Department setupDepartment(){
         Department department =new Department("Operations","Daily errands",10);
         departmentDao.add(department);
         return department;
     }
+    public Article setupNewArticle(){
+        return  new Article("Raila");
+    }
+
 }
