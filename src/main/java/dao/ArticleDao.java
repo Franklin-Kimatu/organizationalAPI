@@ -1,6 +1,7 @@
 package dao;
 
 import models.Article;
+import models.Department;
 
 import java.util.List;
 
@@ -8,11 +9,11 @@ public interface ArticleDao {
 
     //create
     void add(Article article);
-    //void addArticleToDepartment(Article article,Department department);
+    void addArticleToDepartment(Article article, Department department);
 
     //read
     List<Article> getAll();
-    //List<Article> getAllDepartmentsForAnArticle(int id);
+    List<Department> getAllDepartmentsForAnArticle(int id);
 
     //delete
     void deleteById(int id);
