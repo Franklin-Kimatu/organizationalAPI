@@ -67,6 +67,18 @@ public class Sql2oArticleDaoTest {
         assertEquals(0,articleDao.getAll().size());
     }
 
+    //tests for the adding article to the department
+    @Test
+    public void addArticleToDepartmentAddsArticleCorrectly() throws Exception{
+        Department testDepartment =setupDepartment();
+        departmentDao.add(testDepartment);
+        Article testArticle =setupNewArticle();
+        articleDao.add(testArticle);
+
+        articleDao.addArticleToDepartment(testArticle,testDepartment);
+        assertEquals(1,articleDao.getAllDepartmentsForAnArticle(testArticle.getId()).size());
+    }
+
     //helper method
     public Article setupNewArticle(){
         return  new Article("Raila");
