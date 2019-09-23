@@ -33,7 +33,7 @@ public class Sql2oDepartmentDaoTest {
     }
 
     @Test
-    public void addingFoodSetId() throws Exception{
+    public void addingArticleSetId() throws Exception{
         Department testDepartment =setupDepartment();
         assertNotEquals(0,testDepartment.getId());
     }
@@ -81,9 +81,10 @@ public class Sql2oDepartmentDaoTest {
         departmentDao.clearAll();
         assertEquals(0,departmentDao.getAll().size());
     }
-    //helper Methods
+
+//helper
     public Department setupDepartment(){
-        Department department = new Department("Operations","Daily errands",10);
+        Department department =new Department("Operations","Daily errands",10);
         departmentDao.add(department);
         return department;
     }
