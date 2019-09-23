@@ -1,8 +1,10 @@
 package dao;
 
 import models.Article;
+import models.Department;
 import org.sql2o.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sql2oArticleDao implements ArticleDao{
@@ -55,5 +57,18 @@ public class Sql2oArticleDao implements ArticleDao{
         } catch (Sql2oException ex){
             System.out.println(ex);
         }
+    }
+
+    //methods for implementing the many to many relationship for articles and departments
+
+    @Override
+    public  void addArticleToDepartment(Article article, Department department){
+
+    }
+
+    @Override
+    public  List <Department> getAllDepartmentsForAnArticle(int articleId){
+        List<Department> departments = new ArrayList<>();
+        return departments;
     }
 }
