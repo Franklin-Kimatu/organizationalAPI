@@ -94,4 +94,13 @@ public class Sql2oArticleDao implements ArticleDao{
         }
         return departments;
     }
+
+    @Override
+    public Article findById(int id) {
+        try(Connection conn  = sql2o.open()){
+            return conn.createQuery("SELECT * FROM articles WHERE id =:id")
+                    .addParameter("id",id)
+                    .executeAndFetchFirst(Article.class);
+        }
+    }
 }

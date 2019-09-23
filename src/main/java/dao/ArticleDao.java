@@ -14,7 +14,8 @@ public interface ArticleDao {
     //read
     List<Article> getAll();
     List<Department> getAllDepartmentsForAnArticle(int id);
-
+//find
+    Article findById(int id);
     //delete
     void deleteById(int id);
     void clearAll();
