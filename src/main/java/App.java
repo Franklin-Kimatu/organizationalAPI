@@ -4,6 +4,7 @@ import dao.Sql2oArticleDao;
 import dao.Sql2oUserDao;
 import models.Department;
 
+import models.User;
 import org.sql2o.*;
 import static spark.Spark.*;
 public class App {
@@ -43,6 +44,20 @@ public class App {
             return gson.toJson(departmentDao.findById(departmentId));
         });
 
+        //posting users for a specific department
+        post("/departments/:departmentId/users/new","application/json",(request, response) -> {
+            int departmentId =Integer.parseInt(request.params("departmentId"));
+            User user =gson.fromJson(request.body(),User.class);
 
+            user.setDepartmentId(departmentId);
+            userDao.add(user);
+            response.status(201);
+            return gson.toJson(user);
+        });
+
+        //filters
+        after((request, response) -> {
+            response.type("application/json");
+        });
     }
 }
