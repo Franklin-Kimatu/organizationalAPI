@@ -59,7 +59,11 @@ public class Department {
     private int employeesNumber;
     private int id;
 
-    public Department(String departmentName,String description,int employeesNumber){
+    public String getDescription() {
+        return description;
+    }
+
+    public Department(String departmentName, String description, int employeesNumber){
         this.departmentName =departmentName;
         this.description =description;
         this.employeesNumber =employeesNumber;
