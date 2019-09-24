@@ -79,22 +79,35 @@ public class App {
                 return gson.toJson(allUsers);
 
         });
-//adding routes for a many to many relationship
+        //adding routes for a many to many relationship
+//        post("/departments/:departmentId/article/:articleId","application/json",(request, response) -> {
+//            int departmentId = Integer.parseInt(request.params("departmentId"));
+//            int articleId =Integer.parseInt(request.params("articleId"));
+//            Department department = departmentDao.findById(departmentId);
+//            Article article =articleDao.findById(articleId);
+//          //  System.out.println(departmentId);
+//            if(department != null && article != null){
+//                articleDao.addArticleToDepartment(article,department);
+//                response.status(201);
+//                return gson.toJson(String.format("Department '%s' and Article '%s' have been associated",article.getContent(),department.getDepartmentName()));
+//            }else{
+//                throw new ApiExceptions(404,String.format("Department or Article does not exist"));
+//            }
+//        });
         post("/departments/:departmentId/article/:articleId","application/json",(request, response) -> {
             int departmentId = Integer.parseInt(request.params("departmentId"));
-            int articleId =Integer.parseInt(request.params("articleId"));
+            int articleId = Integer.parseInt(request.params("articleId"));
             Department department = departmentDao.findById(departmentId);
-            Article article =articleDao.findById(articleId);
-            System.out.println(department);
-            if(department != null && article != null){
-                articleDao.addArticleToDepartment(article,department);
-                response.status(201);
-                return gson.toJson(String.format("Department '%s' and Article '%s' have been associated",article.getContent(),department.getDepartmentName()));
+            Article article = articleDao.findById(articleId);
+            if(department !=null && article !=null){
+             articleDao.addArticleToDepartment(article,department);
+             response.status(201);
+             return gson.toJson(String.format("Department '%s' and Article '%s' have been associated",article.getContent(),department.getDepartmentName()));
             }else{
                 throw new ApiExceptions(404,String.format("Department or Article does not exist"));
             }
         });
-//getting or retrieving information for the posted many to many information
+        //getting or retrieving information for the posted many to many information
         get("/departments/:id/articles","application/json",(request, response) -> {
             int departmentId = Integer.parseInt(request.params("id"));
             Department departmentToFind = departmentDao.findById(departmentId);

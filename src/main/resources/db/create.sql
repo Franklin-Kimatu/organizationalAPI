@@ -22,8 +22,9 @@ departmentId INTEGER
 
 CREATE TABLE IF NOT EXISTS departments_articles(
 id int PRIMARY KEY auto_increment,
-articleId INTEGER,
-departmentId INTEGER
+departmentId INTEGER,
+articleId INTEGER
+
 );
 
 
