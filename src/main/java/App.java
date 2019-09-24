@@ -72,30 +72,30 @@ public class App {
             int articleId =Integer.parseInt(request.params("articleId"));
             Department department = departmentDao.findById(departmentId);
             Article article =articleDao.findById(articleId);
-
+            System.out.println(departmentId);
             if(department != null && article !=null){
                 articleDao.addArticleToDepartment(article,department);
                 response.status(201);
                 return gson.toJson(String.format("Department '%s' and Article '%s' have been associated",article.getContent(),department.getDepartmentName()));
             }else{
-                throw new ApiExceptions(404,String.format("Department or Article does nor exist"));
+                throw new ApiExceptions(404,String.format("Department or Article does not exist"));
             }
         });
 //getting or retrieving information for the posted many to many information
-//        get("/departments/:id/articles","application/json",(request, response) -> {
-//            int departmentId = Integer.parseInt(request.params("id"));
-//            Department departmentToFind = departmentDao.findById(departmentId);
-//            if(departmentToFind ==null) {
-//                throw new ApiExceptions(404, String.format("No department with the id: \"&s\"exists", request.params("id")));
-//            }
-//                else if(departmentDao.Department(departmentId).size()==0){
-//                    return "{\"message:\"I'm sorry,but no articles are listed for this department.\"}";
-//
-//                }else{
-//                    return gson.toJson(departmentDao.getAllArticlesForADepartment(departmentId));
-//            }
-//
-//        });
+        get("/departments/:id/articles","application/json",(request, response) -> {
+            int departmentId = Integer.parseInt(request.params("id"));
+            Department departmentToFind = departmentDao.findById(departmentId);
+            if(departmentToFind ==null) {
+                throw new ApiExceptions(404, String.format("No department with the id: \"&s\"exists", request.params("id")));
+            }
+                else if(departmentDao.getAllArticlesForADepartment(departmentId).size()==0){
+                    return "{\"message:\"I'm sorry,but no articles are listed for this department.\"}";
+
+                }else{
+                    return gson.toJson(departmentDao.getAllArticlesForADepartment(departmentId));
+            }
+
+        });
 
         exception(ApiExceptions.class, (exc, req, res) -> {
             ApiExceptions err = (ApiExceptions) exc;

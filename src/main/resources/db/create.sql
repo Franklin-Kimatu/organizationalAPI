@@ -17,7 +17,7 @@ id int PRIMARY KEY auto_increment,
 userName VARCHAR,
 userCompanyPosition VARCHAR,
 userRole VARCHAR,
-departmentId VARCHAR
+departmentId INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS departments_articles(
