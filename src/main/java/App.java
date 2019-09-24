@@ -80,20 +80,6 @@ public class App {
 
         });
         //adding routes for a many to many relationship
-//        post("/departments/:departmentId/article/:articleId","application/json",(request, response) -> {
-//            int departmentId = Integer.parseInt(request.params("departmentId"));
-//            int articleId =Integer.parseInt(request.params("articleId"));
-//            Department department = departmentDao.findById(departmentId);
-//            Article article =articleDao.findById(articleId);
-//          //  System.out.println(departmentId);
-//            if(department != null && article != null){
-//                articleDao.addArticleToDepartment(article,department);
-//                response.status(201);
-//                return gson.toJson(String.format("Department '%s' and Article '%s' have been associated",article.getContent(),department.getDepartmentName()));
-//            }else{
-//                throw new ApiExceptions(404,String.format("Department or Article does not exist"));
-//            }
-//        });
         post("/departments/:departmentId/article/:articleId","application/json",(request, response) -> {
             int departmentId = Integer.parseInt(request.params("departmentId"));
             int articleId = Integer.parseInt(request.params("articleId"));
