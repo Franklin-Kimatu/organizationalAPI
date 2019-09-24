@@ -2,10 +2,16 @@ import com.google.gson.Gson;
 import dao.Sql2oDepartmentDao;
 import dao.Sql2oArticleDao;
 import dao.Sql2oUserDao;
+import exception.ApiExceptions;
+import models.Article;
 import models.Department;
 
 import models.User;
 import org.sql2o.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static spark.Spark.*;
 public class App {
     public static void main(String[] args) {
@@ -38,10 +44,16 @@ public class App {
         });
 
         get("/departments/:id","application/json",(request, response) -> {
-            response.type("application/json");
+
             int departmentId =Integer.parseInt(request.params("id"));
-            response.type("application/json");
-            return gson.toJson(departmentDao.findById(departmentId));
+            Department departmentToFind = departmentDao.findById(departmentId);
+            if(departmentToFind ==null){
+                throw new ApiExceptions(404,String.format("No department with the id: \"%s\"exists", request.params("id")));
+            }else {
+                response.type("application/json");
+                return gson.toJson(departmentDao.findById(departmentId));
+            }
+
         });
 
         //posting users for a specific department
@@ -53,6 +65,46 @@ public class App {
             userDao.add(user);
             response.status(201);
             return gson.toJson(user);
+        });
+//adding routes for a many to many relationship
+        post("/departments/:departmentId/article/:articleId","application/json",(request, response) -> {
+            int departmentId = Integer.parseInt(request.params("departmentId"));
+            int articleId =Integer.parseInt(request.params("articleId"));
+            Department department = departmentDao.findById(departmentId);
+            Article article =articleDao.findById(articleId);
+
+            if(department != null && article !=null){
+                articleDao.addArticleToDepartment(article,department);
+                response.status(201);
+                return gson.toJson(String.format("Department '%s' and Article '%s' have been associated",article.getContent(),department.getDepartmentName()));
+            }else{
+                throw new ApiExceptions(404,String.format("Department or Article does nor exist"));
+            }
+        });
+//getting or retrieving information for the posted many to many information
+//        get("/departments/:id/articles","application/json",(request, response) -> {
+//            int departmentId = Integer.parseInt(request.params("id"));
+//            Department departmentToFind = departmentDao.findById(departmentId);
+//            if(departmentToFind ==null) {
+//                throw new ApiExceptions(404, String.format("No department with the id: \"&s\"exists", request.params("id")));
+//            }
+//                else if(departmentDao.Department(departmentId).size()==0){
+//                    return "{\"message:\"I'm sorry,but no articles are listed for this department.\"}";
+//
+//                }else{
+//                    return gson.toJson(departmentDao.getAllArticlesForADepartment(departmentId));
+//            }
+//
+//        });
+
+        exception(ApiExceptions.class, (exc, req, res) -> {
+            ApiExceptions err = (ApiExceptions) exc;
+            Map<String, Object> jsonMap = new HashMap<>();
+            jsonMap.put("status", err.getStatusCode());
+            jsonMap.put("errorMessage", err.getMessage());
+            res.type("application/json"); //after does not run in case of an exception.
+            res.status(err.getStatusCode()); //set the status
+            res.body(gson.toJson(jsonMap));  //set the output.
         });
 
         //filters
